@@ -3,21 +3,23 @@ import { Box, Typography, Card, Avatar, Chip } from '@mui/material';
 import { Email as EmailIcon } from '@mui/icons-material';
 
 interface ProfileCardProps {
-  profilePicture: string;
-  name: string;
-  major: string;
+  fotoperfil: string;
+  nombre: string;
+  carrera: string;
   email: string;
-  grade: string;
-  subjects: string[];
+  semestre: string;
+  experiencia: string[];
+  disponibilidad: { day: string; hours: string }[];
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
-  profilePicture,
-  name,
-  major,
+  fotoperfil,
+  nombre,
+  carrera,
   email,
-  grade,
-  subjects,
+  semestre,
+  experiencia,
+  disponibilidad,
 }) => {
   return (
     <Card
@@ -36,8 +38,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         {/* Profile Picture */}
         <Avatar
-          alt={name}
-          src={profilePicture}
+          alt={nombre}
+          src={fotoperfil}
           sx={{
             width: 65,
             height: 65,
@@ -52,13 +54,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             variant="h6"
             sx={{ fontWeight: 'bold', textAlign: 'left', fontSize: '1.1rem' }}
           >
-            {name}
+            {nombre}
           </Typography>
           <Typography
             variant="body2"
             sx={{ textAlign: 'left', fontSize: '0.95rem', color: '#555' }}
           >
-            {major} | {grade}
+            {carrera} | {semestre}
           </Typography>
 
           {/* Email */}
@@ -105,7 +107,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             marginBottom: 4,
             textAlign: 'left', // Keep the label left-aligned
             flexShrink: 0, // Prevent the label from shrinking
-            marginLeft: 2, // Space between the label and pills
           }}
         >
           Skills
@@ -124,10 +125,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             marginLeft: 2, // Space between the pills and the edge of the card
           }}
         >
-          {subjects.map((subject, index) => (
+          {experiencia.map((expe, index) => (
             <Chip
               key={index}
-              label={subject}
+              label={expe}
               sx={{
                 fontSize: '0.8rem',
                 backgroundColor: '#008DDA',
@@ -137,6 +138,66 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 borderRadius: 3, // Slightly rounded corners for a soft look
               }}
             />
+          ))}
+        </Box>
+      </Box>
+      {/* Availability Section */}
+      <Box
+        sx={{
+          marginTop: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1,
+        }}
+      >
+        {/* Availability Label */}
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '0.9rem',
+            color: 'black',
+          }}
+        >
+          Disponibilidad
+        </Typography>
+
+        {/* Days and Hours */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0.5,
+          }}
+        >
+          {disponibilidad.map((slot, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between', // Align day and hours on opposite ends
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: '0.9rem',
+                  color: '#555',
+                }}
+              >
+                {slot.day}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold',
+                  color: '#333',
+                }}
+              >
+                {slot.hours}
+              </Typography>
+            </Box>
           ))}
         </Box>
       </Box>

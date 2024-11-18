@@ -1,27 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import ProfileCard from '../components/ProfileCard'; // Import updated ProfileCard component
 import { FORMS_SOURCE } from '../constants/links';
+import { fetchUsers } from '../services/usersService';
 
 const Directory: React.FC = () => {
-  const users = [
-    {
-      profilePicture: '/images/profile1.jpg',
-      name: 'Estudiante Apellido',
-      major: 'ITC',
-      email: 'a0000000@tec.mx',
-      grade: '7mo',
-      subjects: ['AI', 'Cloud', 'Backend'],
-    },
-    {
-      profilePicture: '/images/profile2.jpg',
-      name: 'Estudiante Apellido',
-      major: 'IRS',
-      email: 'a0000000@tec.mx',
-      grade: '5to',
-      subjects: ['Control', 'Vision', 'Robotica'],
-    },
-  ];
+
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data = await fetchUsers();
+        setUsers(
+          data.map((row: any) => ({
+            fotoperfil: row.fotoperfil,
+            nombre: row.nombre,
+            carrera: row.carrera,
+            email: row.email,
+            semestre: row.semestre,
+            experiencia: row.experiencia.split(','), // Convert comma-separated string to array
+            disponibilidad: JSON.parse(row.disponibilidad), // Parse JSON string
+          }))
+        );
+      } catch (error) {
+        console.error('Error loading users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
+  }, []);
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   const handleAgendarClick = () => {
     window.location.href = FORMS_SOURCE;
@@ -75,12 +90,13 @@ const Directory: React.FC = () => {
         {users.map((user, index) => (
           <ProfileCard
             key={index}
-            profilePicture={user.profilePicture}
-            name={user.name}
-            major={user.major}
+            fotoperfil={user.fotoperfil}
+            nombre={user.nombre}
+            carrera={user.carrera}
             email={user.email}
-            grade={user.grade}
-            subjects={user.subjects}
+            semestre={user.semestre}
+            experiencia={user.experiencia}
+            disponibilidad={user.disponibilidad}
           />
         ))}
       </Box>
