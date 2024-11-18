@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, CircularProgress, Button } from '@mui/material';
 import ProfileCard from '../components/ProfileCard'; // Import updated ProfileCard component
 import { FORMS_SOURCE } from '../constants/links';
 import { fetchUsers } from '../services/usersService';
@@ -35,7 +35,31 @@ const Directory: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh', // Full screen loader
+          backgroundColor: '#f5f5f5', // Slightly gray background for contrast
+        }}
+      >
+        <Box sx={{ textAlign: 'center' }}>
+          <CircularProgress size={80} thickness={4} sx={{ color: '#008DDA' }} />
+          <Typography
+            variant="h6"
+            sx={{
+              marginTop: 2,
+              fontWeight: '500',
+              color: '#555',
+            }}
+          >
+            Cargando...
+          </Typography>
+        </Box>
+      </Box>
+    );
   }
 
   const handleAgendarClick = () => {
